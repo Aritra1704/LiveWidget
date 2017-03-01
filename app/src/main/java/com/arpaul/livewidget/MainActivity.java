@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ProgressBar pbLoading;
     private TextView tvStatus;
 
+    //http://stackoverflow.com/questions/42532821/how-to-parse-a-u-prefixed-json-response-in-android
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
