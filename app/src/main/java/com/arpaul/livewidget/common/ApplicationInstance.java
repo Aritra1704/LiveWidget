@@ -8,6 +8,8 @@ import android.app.Application;
 public class ApplicationInstance extends Application {
 
     public static final int LOADER_FETCH_JSON_DATA      = 1;
+    public static final int LOADER_DELETE               = 2;
+    public static final int LOADER_INSERT               = 3;
 
     public static final String REST_URL                = "https://www.hackerearth.com/api/events/upcoming/?format=xml";
 

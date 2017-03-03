@@ -18,6 +18,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".widgets.WidgetProvider" >
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
+        <service
+            android:name=".widgets.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <provider
+            android:name=".dataaccess.ContentProviderHelper"
+            android:authorities="com.arpaul.livewidget.dataaccess.ContentProviderHelper"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>
