@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
-    private ArrayList listItemList = new ArrayList();
     private Context context = null;
     private int appWidgetId;
     private static final int CURSOR_LOADER_ID = 1;
@@ -64,29 +63,32 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     }
 
     private void query(){
-        Cursor cursor = context.getContentResolver().query(LWCPConstants.CONTENT_URI_HACKTHON,
-                new String[]{HackathonDO.TITLE, HackathonDO.DESCRIPTION, HackathonDO.STATUS, HackathonDO.COLLEGE},
-                HackathonDO.STATUS + LWCPConstants.TABLE_QUES,
-                new String[]{"ONGOING"},
-                null);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(LWCPConstants.CONTENT_URI_HACKTHON,
+                    new String[]{HackathonDO.TITLE, HackathonDO.DESCRIPTION, HackathonDO.STATUS, HackathonDO.COLLEGE, HackathonDO.CHALLENGE_TYPE},
+                    HackathonDO.STATUS + LWCPConstants.TABLE_QUES,
+                    new String[]{"ONGOING"},
+                    null);
 
-        if(cursor != null && cursor.moveToFirst()){
-            HackathonDO objActiRecogDO = null;
-            do{
-                objActiRecogDO = new HackathonDO();
-                objActiRecogDO.title = cursor.getString(cursor.getColumnIndex(HackathonDO.TITLE));
-                objActiRecogDO.description = cursor.getString(cursor.getColumnIndex(HackathonDO.DESCRIPTION));
-                objActiRecogDO.status = cursor.getString(cursor.getColumnIndex(HackathonDO.STATUS));
-                objActiRecogDO.college = cursor.getString(cursor.getColumnIndex(HackathonDO.COLLEGE));
-                arrHackathonDO.add(objActiRecogDO);
-            } while(cursor.moveToNext());
-
+            if(cursor != null && cursor.moveToFirst()) {
+                HackathonDO objActiRecogDO = null;
+                do {
+                    objActiRecogDO = new HackathonDO();
+                    objActiRecogDO.title = cursor.getString(cursor.getColumnIndex(HackathonDO.TITLE));
+                    objActiRecogDO.description = cursor.getString(cursor.getColumnIndex(HackathonDO.DESCRIPTION));
+                    objActiRecogDO.status = cursor.getString(cursor.getColumnIndex(HackathonDO.STATUS));
+                    objActiRecogDO.college = cursor.getString(cursor.getColumnIndex(HackathonDO.COLLEGE));
+                    objActiRecogDO.challenge_type = cursor.getString(cursor.getColumnIndex(HackathonDO.CHALLENGE_TYPE));
+                    arrHackathonDO.add(objActiRecogDO);
+                } while (cursor.moveToNext());
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        } finally {
             if(cursor != null && !cursor.isClosed())
                 cursor.close();
-
-
-        } else if(cursor != null)
-            cursor.close();
+        }
     }
 
     @Override
@@ -139,6 +141,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         else
             college.append("No");
         remoteView.setTextViewText(R.id.tvCollege, college.toString());
+        remoteView.setTextViewText(R.id.tvChallenge, objHackathonDO.challenge_type);
 
         return remoteView;
     }

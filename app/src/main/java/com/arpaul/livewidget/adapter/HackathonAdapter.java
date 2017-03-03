@@ -54,7 +54,7 @@ public class HackathonAdapter extends RecyclerView.Adapter<HackathonAdapter.View
         if(objHackathonDO.status.equalsIgnoreCase("ongoing"))
             holder.tvStatus.setBackgroundColor(ColorUtils.getColor(context,R.color.color_Green));
         else
-            holder.tvStatus.setBackgroundColor(ColorUtils.getColor(context,R.color.color_Blue));
+            holder.tvStatus.setBackgroundColor(ColorUtils.getColor(context,R.color.color_DirtyYellow));
         holder.tvStatus.setText(objHackathonDO.status);
         StringBuilder college = new StringBuilder();
         college.append("College: ");
