@@ -39,7 +39,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     HackathonDO.COVER_IMAGE         + " VARCHAR, " +
                     HackathonDO.THUMBNAIL           + " VARCHAR, " +
                     HackathonDO.IS_HACKEREARTH      + " VARCHAR, " +
-                    HackathonDO.CHALLENGE_TYPE      + " VARCHAR " +
+                    HackathonDO.CHALLENGE_TYPE      + " VARCHAR, " +
+                    HackathonDO.STATUS              + " VARCHAR " +
                     ");";
 
     DataBaseHelper(Context context){

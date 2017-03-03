@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-import com.arpaul.geocare.R;
+import com.arpaul.livewidget.R;
 
 /**
  * Created by ARPaul on 26-11-2016.
@@ -37,7 +37,7 @@ public class WidgetProvider extends AppWidgetProvider {
         svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
         //which layout to show on widget
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.widget_cell);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_cell);
         //setting adapter to listview of the widget
         remoteViews.setRemoteAdapter(appWidgetId, R.id.lvWidget,svcIntent);
         //setting an empty view in case of no data

@@ -105,8 +105,11 @@ public class InsertLoader extends AsyncTaskLoader {
                 break;
 
             case DELETE_ALL_DATA:
-                context.getContentResolver().delete(LWCPConstants.CONTENT_URI_HACKTHON, null, null);
-                break;
+                String address = "Failure";
+                int deleteData = context.getContentResolver().delete(LWCPConstants.CONTENT_URI_HACKTHON, null, null);
+                if(deleteData > 0)
+                    address = "Success";
+                return address;
             default:
 
                 break;

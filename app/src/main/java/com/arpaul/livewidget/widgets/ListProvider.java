@@ -4,12 +4,14 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Binder;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.arpaul.livewidget.R;
 import com.arpaul.livewidget.dataaccess.LWCPConstants;
 import com.arpaul.livewidget.dataobject.HackathonDO;
+import com.arpaul.utilitieslib.ColorUtils;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,11 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
+        final long identityToken = Binder.clearCallingIdentity();
+
         loadData();
+
+        Binder.restoreCallingIdentity(identityToken);
     }
 
     private Thread thread;
@@ -60,8 +66,8 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     private void query(){
         Cursor cursor = context.getContentResolver().query(LWCPConstants.CONTENT_URI_HACKTHON,
                 new String[]{HackathonDO.TITLE, HackathonDO.DESCRIPTION, HackathonDO.STATUS, HackathonDO.COLLEGE},
-                null,
-                null,
+                HackathonDO.STATUS + LWCPConstants.TABLE_QUES,
+                new String[]{"ONGOING"},
                 null);
 
         if(cursor != null && cursor.moveToFirst()){
@@ -75,8 +81,12 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
                 arrHackathonDO.add(objActiRecogDO);
             } while(cursor.moveToNext());
 
+            if(cursor != null && !cursor.isClosed())
+                cursor.close();
+
+
+        } else if(cursor != null)
             cursor.close();
-        }
     }
 
     @Override
@@ -117,12 +127,18 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     public RemoteViews getViewAt(int position) {
 
         RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.cell_widgetlist);
-        HackathonDO objGeoFenceLocDO = arrHackathonDO.get(position);
-        remoteView.setTextViewText(R.id.tvTitle, objGeoFenceLocDO.title);
-        remoteView.setTextViewText(R.id.tvDescription, objGeoFenceLocDO.description);
+        HackathonDO objHackathonDO = arrHackathonDO.get(position);
+        remoteView.setTextViewText(R.id.tvTitle, objHackathonDO.title);
+        remoteView.setTextViewText(R.id.tvDescription, objHackathonDO.description);
 
-        remoteView.setTextViewText(R.id.tvStatus, objGeoFenceLocDO.status);
-        remoteView.setTextViewText(R.id.tvCollege, objGeoFenceLocDO.college);
+        remoteView.setTextViewText(R.id.tvStatus, objHackathonDO.status);
+        StringBuilder college = new StringBuilder();
+        college.append("College: ");
+        if(objHackathonDO.college.equalsIgnoreCase("true"))
+            college.append("Yes");
+        else
+            college.append("No");
+        remoteView.setTextViewText(R.id.tvCollege, college.toString());
 
         return remoteView;
     }
